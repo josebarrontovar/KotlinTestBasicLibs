@@ -57,11 +57,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Photos"
+                    android:text="Create at"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/photos_count"
+                    android:id="@+id/create_at"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -80,11 +80,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Followers"
+                    android:text="Update at"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/followers_count"
+                    android:id="@+id/update_at"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -103,11 +103,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Following"
+                    android:text="ID"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/following_count"
+                    android:id="@+id/id_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -143,6 +143,7 @@
                 app:tint="#757575" />
 
             <TextView
+                android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -164,6 +165,7 @@
                 app:tint="#757575" />
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -185,6 +187,7 @@
                 app:tint="#757575" />
 
             <TextView
+                android:id="@+id/role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -206,6 +209,7 @@
                 app:tint="#757575" />
 
             <TextView
+                android:id="@+id/password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

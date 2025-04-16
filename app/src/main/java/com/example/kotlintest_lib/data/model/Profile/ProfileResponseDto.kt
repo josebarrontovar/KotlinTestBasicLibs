@@ -4,13 +4,13 @@ import com.example.kotlintest_lib.domain.model.Profile
 import com.google.gson.annotations.SerializedName
 
 data class ProfileResponseDto(
+
     @SerializedName("id")
     val id: Int,
 
     @SerializedName("email")
     val email: String,
 
-    @Transient
     @SerializedName("password")
     val ignoredPassword: String = "",
 
@@ -33,6 +33,7 @@ data class ProfileResponseDto(
         return Profile(
             id = id,
             email = email,
+            password = ignoredPassword,
             name = name,
             role = role,
             avatar = avatar,

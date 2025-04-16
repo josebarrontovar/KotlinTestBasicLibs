@@ -10,7 +10,9 @@ import coil.network.HttpException
 import com.example.kotlintest_lib.data.remote.ApiClient
 import com.example.kotlintest_lib.domain.repository.LoginRepository
 import com.example.kotlintest_lib.utils.SharedPreferences
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel : ViewModel() {
 
@@ -28,7 +30,7 @@ class LoginViewModel : ViewModel() {
     private val _loginError = MutableLiveData<String>()
     val loginError: LiveData<String> = _loginError
 
-    private val _isSuccessSavePreference= MutableLiveData<Boolean>()
+    private val _isSuccessSavePreference = MutableLiveData<Boolean>()
     val isSuccessSavePreference: LiveData<Boolean> = _isSuccessSavePreference
 
     fun validateForm() {
@@ -50,7 +52,9 @@ class LoginViewModel : ViewModel() {
         if (!fullName.isNullOrBlank() && !password.isNullOrBlank()) {
             viewModelScope.launch {
                 try {
-                    val response = loginRepository.login(fullName, password)
+                    val response = withContext(Dispatchers.IO) {
+                        loginRepository.login(fullName, password)
+                    }
                     if (response.accessToken.isNotEmpty() || response.refreshToken.isNotEmpty()) {
                         val sharedPreferences = SharedPreferences()
                         sharedPreferences.saveString(
@@ -65,7 +69,7 @@ class LoginViewModel : ViewModel() {
                             context
                         )
                         _loginError.value = "Login successful"
-                        _isSuccessSavePreference.value= true
+                        _isSuccessSavePreference.value = true
                     } else {
                         _loginError.value = "Login failed"
                     }
