@@ -16,11 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         tools:targetApi="31">
-
+        <activity
+            android:name=".presentation.ui.products.ProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.product.ProductActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="true">
@@ -30,10 +34,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

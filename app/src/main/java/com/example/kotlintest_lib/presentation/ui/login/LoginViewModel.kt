@@ -1,7 +1,6 @@
 package com.example.kotlintest_lib.presentation.ui.login
 
 import android.content.Context
-import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

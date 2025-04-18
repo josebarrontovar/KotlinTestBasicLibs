@@ -1,11 +1,13 @@
 package com.example.kotlintest_lib.presentation.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.kotlintest_lib.databinding.ActivityHomeBinding
+import com.example.kotlintest_lib.presentation.ui.products.ProductActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -50,9 +52,17 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.id.observe(this) {
             binding.idUser.text = it.toString()
         }
+
+        binding.followButton.setOnClickListener {
+            val intent = Intent(this, ProductActivity::class.java)
+            intent.putExtra("id", binding.idUser.text.toString())
+            startActivity(intent)
+
+        }
     }
 
     private fun initProfileData() {
         homeViewModel.getProfile()
     }
+
 }

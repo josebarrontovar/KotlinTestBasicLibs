@@ -1,12 +1,10 @@
 package com.example.kotlintest_lib.domain.model
 
-data class Profile(
+data class Category(
     val id: Int,
-    val email: String,
-    val password: String = "",
     val name: String,
-    val role: String,
-    val avatar: String,
+    val slug: String,
+    val image: String,
     val creationAt: String,
     val updatedAt: String
 )

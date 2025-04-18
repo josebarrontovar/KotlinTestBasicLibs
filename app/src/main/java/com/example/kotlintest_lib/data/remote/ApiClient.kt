@@ -5,6 +5,8 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.kotlintest_lib.domain.repository.LoginRepository
 import com.example.kotlintest_lib.domain.repository.LoginRepositoryImpl
+import com.example.kotlintest_lib.domain.repository.ProductRepository
+import com.example.kotlintest_lib.domain.repository.ProductRepositoryImpl
 import com.example.kotlintest_lib.domain.repository.ProfileRepository
 import com.example.kotlintest_lib.domain.repository.ProfileRepositoryImpl
 import okhttp3.OkHttpClient
@@ -40,6 +42,10 @@ object ApiClient {
 
     val profileRepository: ProfileRepository by lazy {
         ProfileRepositoryImpl(retrofit.create(ApiService::class.java))
+    }
+
+    val productRepository: ProductRepository by lazy {
+        ProductRepositoryImpl(retrofit.create(ApiService::class.java))
     }
 
     /* val userRepository: UserRepository by lazy {
