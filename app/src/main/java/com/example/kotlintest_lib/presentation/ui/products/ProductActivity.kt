@@ -5,11 +5,10 @@ import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.kotlintest_lib.R
 import com.example.kotlintest_lib.databinding.ActivityProductBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProductActivity : AppCompatActivity() {
     val productViewModel: ProductViewModel by viewModels()
     private lateinit var binding: ActivityProductBinding
@@ -24,7 +23,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun observersProductData() {
-        productViewModel.dataProduct.observe(this){
+        productViewModel.dataProduct.observe(this) {
             Log.d("JGBT_ACTIVITY_PRODUCT", "Data Product: $it")
         }
     }
@@ -36,8 +35,6 @@ class ProductActivity : AppCompatActivity() {
             Log.d("JGBT22_Product", "Products: $products")
         }
     }
-
-
 
 
 }

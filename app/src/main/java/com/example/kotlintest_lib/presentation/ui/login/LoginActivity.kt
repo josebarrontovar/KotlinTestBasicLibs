@@ -13,7 +13,9 @@ import androidx.core.widget.addTextChangedListener
 import com.example.kotlintest_lib.databinding.ActivityLoginBinding
 import com.example.kotlintest_lib.presentation.ui.home.HomeActivity
 import com.example.kotlintest_lib.utils.SharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()

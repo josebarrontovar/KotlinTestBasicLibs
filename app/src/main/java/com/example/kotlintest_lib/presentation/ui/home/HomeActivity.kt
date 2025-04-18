@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.kotlintest_lib.databinding.ActivityHomeBinding
 import com.example.kotlintest_lib.presentation.ui.products.ProductActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()

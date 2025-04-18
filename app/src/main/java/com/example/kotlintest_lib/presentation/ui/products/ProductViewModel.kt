@@ -4,20 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kotlintest_lib.data.remote.ApiClient
 import com.example.kotlintest_lib.domain.model.Product
 import com.example.kotlintest_lib.domain.repository.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ProductViewModel : ViewModel() {
+@HiltViewModel
+class ProductViewModel @Inject constructor(private val productRepository: ProductRepository) :
+    ViewModel() {
 
 
     private val _dataProduct = MutableLiveData<List<Product>>()
     val dataProduct: LiveData<List<Product>> get() = _dataProduct
 
-    private val productRepository: ProductRepository = ApiClient.productRepository
     fun getProducts(id: String): List<Product> {
         viewModelScope.launch {
             try {

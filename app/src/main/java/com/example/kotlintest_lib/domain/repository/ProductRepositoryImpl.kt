@@ -2,8 +2,9 @@ package com.example.kotlintest_lib.domain.repository
 
 import com.example.kotlintest_lib.data.remote.ApiService
 import com.example.kotlintest_lib.domain.model.Product
+import javax.inject.Inject
 
-class ProductRepositoryImpl(private val apiService: ApiService) : ProductRepository {
+class ProductRepositoryImpl @Inject constructor(private val apiService: ApiService) : ProductRepository {
     override suspend fun getProductList(id: String): List<Product> {
         val response = apiService.getProducts(Integer.valueOf(id), Integer.valueOf(10))
         if (response.isSuccessful) {

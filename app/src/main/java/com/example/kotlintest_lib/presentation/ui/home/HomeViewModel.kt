@@ -5,17 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kotlintest_lib.data.remote.ApiClient
 import com.example.kotlintest_lib.domain.repository.ProfileRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val profileRepository: ProfileRepository) :
+    ViewModel() {
 
-    private val profileRepository: ProfileRepository = ApiClient.profileRepository
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> get() = _name
 

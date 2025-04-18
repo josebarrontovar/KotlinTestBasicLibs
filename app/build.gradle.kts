@@ -54,8 +54,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Hilt para inyección de dependencias en Android
-    implementation("com.google.dagger:hilt-android:2.48") // Hilt Android
-    kapt("com.google.dagger:hilt-compiler:2.48") // Hilt Compiler
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 // ViewModel y LiveData para manejo de ciclos de vida y datos reactivos
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2") // ViewModel KTX

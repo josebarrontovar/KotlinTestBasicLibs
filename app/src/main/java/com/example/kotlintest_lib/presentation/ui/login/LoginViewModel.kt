@@ -6,16 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
-import com.example.kotlintest_lib.data.remote.ApiClient
 import com.example.kotlintest_lib.domain.repository.LoginRepository
 import com.example.kotlintest_lib.utils.SharedPreferences
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
+    ViewModel() {
 
-    private val loginRepository: LoginRepository = ApiClient.loginRepository
 
     private val _fullName = MutableLiveData<String>()
     val fullName: LiveData<String> get() = _fullName

@@ -20,9 +20,6 @@
             android:name=".presentation.ui.products.ProductActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.product.ProductActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="false" />
         <activity

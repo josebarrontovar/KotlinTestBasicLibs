@@ -3,8 +3,9 @@ package com.example.kotlintest_lib.domain.repository
 import com.example.kotlintest_lib.data.model.LoginDto.LoginRequestDto
 import com.example.kotlintest_lib.data.remote.ApiService
 import com.example.kotlintest_lib.domain.model.AuthTokens
+import javax.inject.Inject
 
-class LoginRepositoryImpl(private val apiService: ApiService) : LoginRepository {
+class LoginRepositoryImpl @Inject constructor(private val apiService: ApiService) : LoginRepository {
 
     override suspend fun login(
         fullName: String,
