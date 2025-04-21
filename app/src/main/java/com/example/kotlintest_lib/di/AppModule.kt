@@ -11,6 +11,7 @@ import com.example.kotlintest_lib.domain.repository.ProductRepository
 import com.example.kotlintest_lib.domain.repository.ProductRepositoryImpl
 import com.example.kotlintest_lib.domain.repository.ProfileRepository
 import com.example.kotlintest_lib.domain.repository.ProfileRepositoryImpl
+import com.example.kotlintest_lib.utils.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,5 +77,11 @@ class AppModule {
 
     @Provides
     fun provideBaseUrl(): String = "https://api.escuelajs.co/api/v1/"
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return SharedPreferences(context)
+    }
 
 }

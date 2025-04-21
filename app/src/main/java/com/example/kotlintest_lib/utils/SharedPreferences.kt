@@ -1,18 +1,25 @@
 package com.example.kotlintest_lib.utils
 
 import android.content.Context
+import javax.inject.Inject
 
-class SharedPreferences {
+class SharedPreferences @Inject constructor(context: Context) {
 
-    fun saveString(key: String, value: String, context: Context) {
-        val sharedPreferences = context.getSharedPreferences("PrefTest", Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences("PrefTest", Context.MODE_PRIVATE)
+
+    fun saveString(key: String, value: String) {
         val editor = sharedPreferences.edit()
         editor.putString(key, value)
         editor.apply()
     }
 
     fun getString(key: String, context: Context): String? {
-        val sharedPreferences = context.getSharedPreferences("PrefTest", Context.MODE_PRIVATE)
         return sharedPreferences.getString(key, null)
+    }
+
+    fun clearKey(key: String, context: Context) {
+        val editor = sharedPreferences.edit()
+        editor.remove(key)
+        editor.apply()
     }
 }

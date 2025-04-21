@@ -8,13 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.kotlintest_lib.databinding.ActivityHomeBinding
 import com.example.kotlintest_lib.presentation.ui.products.ProductActivity
+import com.example.kotlintest_lib.utils.SharedPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +65,14 @@ class HomeActivity : AppCompatActivity() {
             intent.putExtra("id", binding.idUser.text.toString())
             startActivity(intent)
 
+        }
+
+        binding.clearToken.setOnClickListener {
+            sharedPreferences.clearKey("access_token", this)
+            sharedPreferences.clearKey("refresh_token", this)
+            if (sharedPreferences.getString("access_token", this) == null) {
+                finish()
+            }
         }
     }
 

@@ -15,9 +15,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
+class LoginViewModel @Inject constructor(
+    private val loginRepository: LoginRepository,
+    private val sharedPreferences: SharedPreferences
+) :
     ViewModel() {
-
 
     private val _fullName = MutableLiveData<String>()
     val fullName: LiveData<String> get() = _fullName
@@ -57,17 +59,14 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
                         loginRepository.login(fullName, password)
                     }
                     if (response.accessToken.isNotEmpty() || response.refreshToken.isNotEmpty()) {
-                        val sharedPreferences = SharedPreferences()
                         sharedPreferences.saveString(
                             "access_token",
-                            response.accessToken,
-                            context
+                            response.accessToken
                         )
 
                         sharedPreferences.saveString(
                             "refresh_token",
-                            response.refreshToken,
-                            context
+                            response.refreshToken
                         )
                         _loginError.value = "Login successful"
                         _isSuccessSavePreference.value = true

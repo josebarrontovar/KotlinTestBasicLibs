@@ -14,13 +14,15 @@ import com.example.kotlintest_lib.databinding.ActivityLoginBinding
 import com.example.kotlintest_lib.presentation.ui.home.HomeActivity
 import com.example.kotlintest_lib.utils.SharedPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
 
-    val sharedPreferences = SharedPreferences()
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
