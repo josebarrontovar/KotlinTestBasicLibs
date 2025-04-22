@@ -70,6 +70,14 @@ class LoginActivity : AppCompatActivity() {
                     goToHome()
                 }
             } else {
+                sharedPreferences.saveString(
+                    "access_token",
+                    token.accessToken,
+                )
+                sharedPreferences.saveString(
+                    "refresh_token",
+                    token.refreshToken
+                )
                 goToHome()
             }
         }

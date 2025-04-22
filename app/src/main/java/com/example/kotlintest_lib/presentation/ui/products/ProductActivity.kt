@@ -7,6 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlintest_lib.databinding.ActivityProductBinding
+import com.example.kotlintest_lib.domain.model.Product
+import com.example.kotlintest_lib.domain.model.toDomain
 import com.example.kotlintest_lib.presentation.components.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,10 +43,21 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun initProductData(productId: String?) {
-        Log.d("JGBT11_Product", "Product ID: $productId")
+        productViewModel.loadProductsWithCategory()
         productId?.let {
-            val products = productViewModel.getProducts(it)
-            Log.d("JGBT22_Product", "Products: $products")
+            productViewModel.productWithCategoryLiveData.observe(this) { productsDB ->
+                val productsConverter: List<Product> = productsDB.map { it.toDomain() }
+                if (productsDB.isNotEmpty()) {
+                    adapter.updateData(productsConverter)
+                } else {
+                    productViewModel.getProducts(it)
+                    productViewModel.dataProduct.observe(this) {
+                        if (it.isNotEmpty()) {
+                            productViewModel.insertProductToDB()
+                        }
+                    }
+                }
+            }
         }
     }
 

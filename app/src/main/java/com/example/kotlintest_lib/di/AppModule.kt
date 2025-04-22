@@ -6,6 +6,8 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.kotlintest_lib.data.database.AppDatabase
 import com.example.kotlintest_lib.data.database.dao.AuthDao
+import com.example.kotlintest_lib.data.database.dao.CategoryDao
+import com.example.kotlintest_lib.data.database.dao.ProductDao
 import com.example.kotlintest_lib.data.remote.ApiService
 import com.example.kotlintest_lib.data.remote.TokenInterceptor
 import com.example.kotlintest_lib.domain.repository.AuthRepository
@@ -35,12 +37,6 @@ class AppModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideProductRepository(apiService: ApiService): ProductRepository {
-        return ProductRepositoryImpl(apiService)
     }
 
     @Provides
@@ -103,6 +99,28 @@ class AppModule {
     @Singleton
     fun provideAuthDao(database: AppDatabase): AuthDao {
         return database.authDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductDao(database: AppDatabase): ProductDao {
+        return database.productDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryDao(database: AppDatabase): CategoryDao {
+        return database.categoryDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductRepository(
+        apiService: ApiService,
+        dbProduct: ProductDao,
+        dbCategory: CategoryDao
+    ): ProductRepository {
+        return ProductRepositoryImpl(apiService, dbProduct, dbCategory)
     }
 
     @Provides
