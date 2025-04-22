@@ -79,9 +79,9 @@ dependencies {
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2") // Chucker No-Op en release
 
 // Room para acceso a base de datos local en Android
-    implementation("androidx.room:room-runtime:2.5.2") // Room Runtime
-    kapt("androidx.room:room-compiler:2.5.2") // Room Compiler
-    implementation("androidx.room:room-ktx:2.5.2") // Room KTX
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
 
 // Navigation para facilitar la navegación entre fragmentos
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5") // Navigation Fragment KTX

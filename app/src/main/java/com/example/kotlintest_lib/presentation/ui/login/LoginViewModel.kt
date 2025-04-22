@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
+import com.example.kotlintest_lib.data.database.dao.AuthDao
+import com.example.kotlintest_lib.data.database.entities.AuthEntity
 import com.example.kotlintest_lib.domain.repository.LoginRepository
 import com.example.kotlintest_lib.utils.SharedPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val db: AuthDao
 ) :
     ViewModel() {
 
@@ -59,15 +62,23 @@ class LoginViewModel @Inject constructor(
                         loginRepository.login(fullName, password)
                     }
                     if (response.accessToken.isNotEmpty() || response.refreshToken.isNotEmpty()) {
-                        sharedPreferences.saveString(
-                            "access_token",
-                            response.accessToken
+                        db.insert(
+                            AuthEntity(
+                                accessToken = response.accessToken,
+                                refreshToken = response.refreshToken
+                            )
                         )
+                        /* sharedPreferences.saveString(
+                             "access_token",
+                             response.accessToken
+                         )
 
-                        sharedPreferences.saveString(
-                            "refresh_token",
-                            response.refreshToken
-                        )
+                         sharedPreferences.saveString(
+                             "refresh_token",
+                             response.refreshToken
+                         )
+
+                         */
                         _loginError.value = "Login successful"
                         _isSuccessSavePreference.value = true
                     } else {
