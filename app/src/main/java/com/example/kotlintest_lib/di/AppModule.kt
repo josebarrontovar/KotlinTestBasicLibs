@@ -8,6 +8,8 @@ import com.example.kotlintest_lib.data.database.AppDatabase
 import com.example.kotlintest_lib.data.database.dao.AuthDao
 import com.example.kotlintest_lib.data.remote.ApiService
 import com.example.kotlintest_lib.data.remote.TokenInterceptor
+import com.example.kotlintest_lib.domain.repository.AuthRepository
+import com.example.kotlintest_lib.domain.repository.AuthRepositoryImpl
 import com.example.kotlintest_lib.domain.repository.LoginRepository
 import com.example.kotlintest_lib.domain.repository.LoginRepositoryImpl
 import com.example.kotlintest_lib.domain.repository.ProductRepository
@@ -20,8 +22,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -67,9 +67,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(@ApplicationContext context: Context, db:AuthDao): OkHttpClient {
+    fun provideOkHttpClient(@ApplicationContext context: Context, db: AuthDao): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(TokenInterceptor(context,db))
+            .addInterceptor(TokenInterceptor(context, db))
             .addInterceptor(
                 ChuckerInterceptor.Builder(context)
                     .collector(ChuckerCollector(context))
@@ -105,4 +105,9 @@ class AppModule {
         return database.authDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideAuthRepository(dbAuth: AuthDao): AuthRepository {
+        return AuthRepositoryImpl(dbAuth)
+    }
 }

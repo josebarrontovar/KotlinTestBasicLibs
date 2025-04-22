@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
-import com.example.kotlintest_lib.data.database.dao.AuthDao
-import com.example.kotlintest_lib.data.database.entities.AuthEntity
+import com.example.kotlintest_lib.domain.model.AuthModel
+import com.example.kotlintest_lib.domain.repository.AuthRepository
 import com.example.kotlintest_lib.domain.repository.LoginRepository
 import com.example.kotlintest_lib.utils.SharedPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val sharedPreferences: SharedPreferences,
-    private val db: AuthDao
+    private val db: AuthRepository
 ) :
     ViewModel() {
 
@@ -64,7 +64,7 @@ class LoginViewModel @Inject constructor(
                     }
                     if (response.accessToken.isNotEmpty() || response.refreshToken.isNotEmpty()) {
                         db.insert(
-                            AuthEntity(
+                            AuthModel(
                                 accessToken = response.accessToken,
                                 refreshToken = response.refreshToken
                             )
@@ -72,7 +72,7 @@ class LoginViewModel @Inject constructor(
 
                         // Verifica si el registro se insertó correctamente
                         val insertedAuth =
-                            db.getAuthById(1) // Asegúrate de que el ID 1 es el que deseas verificar
+                            db.getAuthDB() // Asegúrate de que el ID 1 es el que deseas verificar
                         if (insertedAuth != null) {
                             Log.d("JGBT", "Token inserted successfully: $insertedAuth")
                             // Puedes realizar alguna acción adicional aquí si es necesario
@@ -107,15 +107,12 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun getTokenDB(): LiveData<AuthEntity> {
-        val result = MutableLiveData<AuthEntity>()
+    fun getTokenDB(): LiveData<AuthModel> {
+        val result = MutableLiveData<AuthModel>()
         viewModelScope.launch {
             try {
                 val authEntity = withContext(Dispatchers.IO) {
-                    db.getAuthById(1) ?: AuthEntity(
-                        accessToken = "",
-                        refreshToken = ""
-                    )
+                    db.getAuthDB()
                 }
                 result.value = authEntity
 

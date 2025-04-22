@@ -34,10 +34,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getDataDBPrintLogs() {
-        homeViewModel.getAuthFromViewModel().observe(this, Observer {
+        homeViewModel.authLiveData.observe(this, Observer {
             Log.d("JGBT", "getDataDBPrintLogs access: ${it.accessToken}")
             Log.d("JGBT", "getDataDBPrintLogs refresh: ${it.refreshToken}")
-            Log.d("JGBT", "getDataDBPrintLogs id: ${it.id}")
         })
 
         sharedPreferences.getString("access_token", this)?.let {
@@ -89,7 +88,8 @@ class HomeActivity : AppCompatActivity() {
             sharedPreferences.clearKey("access_token", this)
             sharedPreferences.clearKey("refresh_token", this)
             if (sharedPreferences.getString("access_token", this) == null) {
-                homeViewModel.getAuthFromViewModel().observe(this, Observer {
+                Log.d("JGBT", "Se limpia SharedPreferences")
+                homeViewModel.authLiveData.observe(this, Observer {
                     if (it.accessToken.isEmpty()) {
                         finish()
                     }
@@ -98,16 +98,21 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.clearDB.setOnClickListener {
+            Log.d("JGBT", "Click clearDB")
             homeViewModel.deleteAuthById(1)
-            homeViewModel.getAuthFromViewModel().observe(this, Observer {
+            Log.d("JGBT", "Click 1")
+            homeViewModel.authLiveData.observe(this) { it ->
                 if (it.accessToken.isEmpty()) {
+                    Log.d("JGBT", "Click 2")
                     val dataShared =
                         sharedPreferences.getString("access_token", this@HomeActivity)
+                    Log.d("JGBT", "accessToken ENTRO FINISH dataShared: $dataShared")
                     if (dataShared.isNullOrEmpty()) {
+                        Log.d("JGBT", "ENTRO FINISH dataShared fin: $dataShared")
                         finish()
                     }
                 }
-            })
+            }
         }
     }
 
