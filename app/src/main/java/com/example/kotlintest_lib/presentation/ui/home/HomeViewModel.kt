@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kotlintest_lib.data.database.dao.AuthDao
+import com.example.kotlintest_lib.data.database.entities.AuthEntity
 import com.example.kotlintest_lib.domain.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +17,10 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val profileRepository: ProfileRepository) :
+class HomeViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository,
+    private val dbAuth: AuthDao
+) :
     ViewModel() {
 
     private val _name = MutableLiveData<String>()
@@ -41,7 +46,6 @@ class HomeViewModel @Inject constructor(private val profileRepository: ProfileRe
 
     private val _id = MutableLiveData<Int>()
     val id: LiveData<Int> get() = _id
-
 
     fun getProfile() {
         viewModelScope.launch {
@@ -74,5 +78,38 @@ class HomeViewModel @Inject constructor(private val profileRepository: ProfileRe
         val outputFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault()) // Formato deseado
         val date = inputFormat.parse(dateString)
         return if (date != null) outputFormat.format(date) else ""
+    }
+
+    fun getAuthFromViewModel(): LiveData<AuthEntity> {
+        val result = MutableLiveData<AuthEntity>()
+        viewModelScope.launch {
+            try {
+                val authEntity = withContext(Dispatchers.IO) {
+                    dbAuth.getAuthById(1) ?: AuthEntity(
+                        accessToken = "",
+                        refreshToken = ""
+                    )
+                }
+                result.value = authEntity
+
+            } catch (e: Exception) {
+                Log.e("ViewModel", "Error retrieving auth: ${e.message}")
+                result.postValue(AuthEntity(0, "", ""))
+            }
+        }
+        return result
+    }
+
+    fun deleteAuthById(id: Int) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    dbAuth.deleteAuthById(id)
+                    dbAuth.resetAutoIncrement()
+                }
+            } catch (e: Exception) {
+                Log.e("ViewModel", "Error deleting auth: ${e.message}")
+            }
+        }
     }
 }

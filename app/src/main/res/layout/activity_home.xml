@@ -224,26 +224,35 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/follow_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="#00796B"
-        android:text="Follow Me"
-        android:layout_marginEnd="20dp"
-        android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#00796B"
+            android:text="Follow Me"
+            android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/clear_token"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="#00796B"
-        android:text="Clear Token"
-        android:textColor="@android:color/white"/>
+        <Button
+            android:id="@+id/clear_token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#00796B"
+            android:text="Clear ShaedPref"
+            android:layout_marginEnd="20dp"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/clearDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#00796B"
+            android:text="Clear DB"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

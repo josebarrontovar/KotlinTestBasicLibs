@@ -1,6 +1,7 @@
 package com.example.kotlintest_lib.presentation.ui.login
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -68,17 +69,26 @@ class LoginViewModel @Inject constructor(
                                 refreshToken = response.refreshToken
                             )
                         )
-                        /* sharedPreferences.saveString(
-                             "access_token",
-                             response.accessToken
-                         )
 
-                         sharedPreferences.saveString(
-                             "refresh_token",
-                             response.refreshToken
-                         )
+                        // Verifica si el registro se insertó correctamente
+                        val insertedAuth =
+                            db.getAuthById(1) // Asegúrate de que el ID 1 es el que deseas verificar
+                        if (insertedAuth != null) {
+                            Log.d("JGBT", "Token inserted successfully: $insertedAuth")
+                            // Puedes realizar alguna acción adicional aquí si es necesario
+                        } else {
+                            Log.d("JGBT", "Failed to insert token")
+                        }
+                        sharedPreferences.saveString(
+                            "access_token",
+                            response.accessToken
+                        )
 
-                         */
+                        sharedPreferences.saveString(
+                            "refresh_token",
+                            response.refreshToken
+                        )
+
                         _loginError.value = "Login successful"
                         _isSuccessSavePreference.value = true
                     } else {
@@ -96,4 +106,25 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun getTokenDB(): LiveData<AuthEntity> {
+        val result = MutableLiveData<AuthEntity>()
+        viewModelScope.launch {
+            try {
+                val authEntity = withContext(Dispatchers.IO) {
+                    db.getAuthById(1) ?: AuthEntity(
+                        accessToken = "",
+                        refreshToken = ""
+                    )
+                }
+                result.value = authEntity
+
+            } catch (e: Exception) {
+                Log.d("JGBT", "Failed to retrieve token: ${e.message}")
+            }
+        }
+        return result
+    }
+
+
 }

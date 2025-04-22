@@ -4,7 +4,6 @@ package com.example.kotlintest_lib.presentation.ui.login
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -23,13 +22,14 @@ class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val buttonLogin = binding.loginButton
-        validateData();
+        validateToken();
         permissions()
 
         buttonLogin.setOnClickListener {
@@ -56,18 +56,24 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginViewModel.isSuccessSavePreference.observe(this) {
-            Log.d("JGBT", "Token: " + sharedPreferences.getString("access_token", this))
-            Log.d("JGBT", "Refresh Token: " + sharedPreferences.getString("refresh_token", this))
             goToHome()
         }
 
     }
 
-    private fun validateData() {
-        val tokenSaved = sharedPreferences.getString("access_token", this)
-        if (tokenSaved != null) {
-            goToHome()
+    private fun validateToken() {
+        loginViewModel.getTokenDB().observe(this) { token ->
+            if (token.accessToken.isEmpty()) {
+                var tokenSharedPref =
+                    sharedPreferences.getString("access_token", this@LoginActivity)
+                if (tokenSharedPref != null) {
+                    goToHome()
+                }
+            } else {
+                goToHome()
+            }
         }
+
     }
 
     private fun goToHome() {

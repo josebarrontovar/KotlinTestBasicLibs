@@ -95,14 +95,14 @@ class AppModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "app_database"
-        ).build()
+            "app_database",
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @Singleton
-    fun provideUserDao(database: AppDatabase): AuthDao {
-        return database.myDao()
+    fun provideAuthDao(database: AppDatabase): AuthDao {
+        return database.authDao()
     }
 
 }

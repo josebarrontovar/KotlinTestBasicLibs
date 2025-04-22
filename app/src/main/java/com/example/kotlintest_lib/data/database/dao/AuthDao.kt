@@ -12,4 +12,11 @@ interface AuthDao {
 
     @Query("SELECT * FROM auth_table WHERE id=:id")
     suspend fun getAuthById(id: Int): AuthEntity?
+
+    @Query("DELETE FROM auth_table WHERE id=:id")
+    suspend fun deleteAuthById(id: Int)
+
+    @Query("DELETE FROM sqlite_sequence WHERE name='auth_table'")
+    suspend fun resetAutoIncrement()
+
 }

@@ -7,5 +7,5 @@ import com.example.kotlintest_lib.data.database.entities.AuthEntity
 
 @Database(entities = [AuthEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun myDao(): AuthDao
+    abstract fun authDao(): AuthDao
 }

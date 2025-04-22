@@ -2,9 +2,11 @@ package com.example.kotlintest_lib.presentation.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import coil.load
 import com.example.kotlintest_lib.databinding.ActivityHomeBinding
 import com.example.kotlintest_lib.presentation.ui.products.ProductActivity
@@ -28,6 +30,22 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         initProfileData()
         observerProfileData()
+        getDataDBPrintLogs()
+    }
+
+    private fun getDataDBPrintLogs() {
+        homeViewModel.getAuthFromViewModel().observe(this, Observer {
+            Log.d("JGBT", "getDataDBPrintLogs access: ${it.accessToken}")
+            Log.d("JGBT", "getDataDBPrintLogs refresh: ${it.refreshToken}")
+            Log.d("JGBT", "getDataDBPrintLogs id: ${it.id}")
+        })
+
+        sharedPreferences.getString("access_token", this)?.let {
+            Log.d("JGBT", "getDataSharedPrintLogs access: $it")
+        }
+        sharedPreferences.getString("refresh_token", this)?.let {
+            Log.d("JGBT", "getDataSharedPrintLogs refresh: $it")
+        }
     }
 
     private fun observerProfileData() {
@@ -71,8 +89,25 @@ class HomeActivity : AppCompatActivity() {
             sharedPreferences.clearKey("access_token", this)
             sharedPreferences.clearKey("refresh_token", this)
             if (sharedPreferences.getString("access_token", this) == null) {
-                finish()
+                homeViewModel.getAuthFromViewModel().observe(this, Observer {
+                    if (it.accessToken.isEmpty()) {
+                        finish()
+                    }
+                })
             }
+        }
+
+        binding.clearDB.setOnClickListener {
+            homeViewModel.deleteAuthById(1)
+            homeViewModel.getAuthFromViewModel().observe(this, Observer {
+                if (it.accessToken.isEmpty()) {
+                    val dataShared =
+                        sharedPreferences.getString("access_token", this@HomeActivity)
+                    if (dataShared.isNullOrEmpty()) {
+                        finish()
+                    }
+                }
+            })
         }
     }
 
