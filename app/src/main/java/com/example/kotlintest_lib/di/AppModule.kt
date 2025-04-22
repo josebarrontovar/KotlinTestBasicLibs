@@ -1,8 +1,11 @@
 package com.example.kotlintest_lib.di
 
 import android.content.Context
+import androidx.room.Room
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.kotlintest_lib.data.database.AppDatabase
+import com.example.kotlintest_lib.data.database.dao.AuthDao
 import com.example.kotlintest_lib.data.remote.ApiService
 import com.example.kotlintest_lib.data.remote.TokenInterceptor
 import com.example.kotlintest_lib.domain.repository.LoginRepository
@@ -17,6 +20,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -62,9 +67,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
+    fun provideOkHttpClient(@ApplicationContext context: Context, db:AuthDao): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(TokenInterceptor(context))
+            .addInterceptor(TokenInterceptor(context,db))
             .addInterceptor(
                 ChuckerInterceptor.Builder(context)
                     .collector(ChuckerCollector(context))
@@ -82,6 +87,22 @@ class AppModule {
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return SharedPreferences(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(database: AppDatabase): AuthDao {
+        return database.myDao()
     }
 
 }
