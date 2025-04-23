@@ -1,10 +1,14 @@
 package com.example.kotlintest_lib.presentation.ui.home
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.BackoffPolicy
+import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.example.kotlintest_lib.data.worker.ProductsWorker
@@ -12,10 +16,12 @@ import com.example.kotlintest_lib.domain.model.AuthModel
 import com.example.kotlintest_lib.domain.repository.AuthRepository
 import com.example.kotlintest_lib.domain.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -24,9 +30,11 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val dbAuthRepository: AuthRepository,
-    private val workManager: WorkManager
+    @ApplicationContext private val applicationContext: android.content.Context,
 ) :
     ViewModel() {
+
+    private val context = applicationContext
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> get() = _name
@@ -120,13 +128,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun startLogWorker() {
-        val workRequest = PeriodicWorkRequest.Builder(
-            ProductsWorker::class.java,
-            20, TimeUnit.SECONDS // Define la repetición cada 20 segundos
-        ).build()
+        val builder = OneTimeWorkRequest.Builder(ProductsWorker::class.java)
+            .setInitialDelay(5, TimeUnit.SECONDS)
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                Duration.ofSeconds(10)    // java.time.Duration
+            )
 
         // Inicia el trabajo
-        workManager.enqueue(workRequest)
+        // 2) Construye el request
+        val workRequest = builder.build()
+
+        // 3) Encola
+        WorkManager.getInstance(context)
+            .enqueue(workRequest)
     }
 }
