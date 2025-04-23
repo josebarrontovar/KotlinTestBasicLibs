@@ -79,9 +79,9 @@ dependencies {
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2") // Chucker No-Op en release
 
 // Room para acceso a base de datos local en Android
-    implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
-    implementation ("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 
 // Navigation para facilitar la navegación entre fragmentos
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5") // Navigation Fragment KTX
@@ -91,10 +91,14 @@ dependencies {
     implementation("io.coil-kt:coil:2.4.0") // Coil Image Loading
 
 
-
     implementation("androidx.appcompat:appcompat:1.7.0")  // Or the latest stable version
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.12.0")  // Or the latest stable version
     implementation("androidx.cardview:cardview:1.0.0")
+
+    // --- WorkManager + Hilt integration ---
+    implementation("androidx.work:work-runtime-ktx:2.7.0")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
 
 }

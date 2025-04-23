@@ -13,7 +13,7 @@ class ProductRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao
 ) : ProductRepository {
     override suspend fun getProductList(id: String): List<Product> {
-        val response = apiService.getProducts(Integer.valueOf(id), Integer.valueOf(10))
+        val response = apiService.getProducts(Integer.valueOf(id), Integer.valueOf(100))
         if (response.isSuccessful) {
             return response.body()?.map { it.toDomain() } ?: emptyList()
         } else {

@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import com.example.kotlintest_lib.data.worker.ProductsWorker
 import com.example.kotlintest_lib.domain.model.AuthModel
 import com.example.kotlintest_lib.domain.repository.AuthRepository
 import com.example.kotlintest_lib.domain.repository.ProfileRepository
@@ -14,12 +17,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val dbAuthRepository: AuthRepository
+    private val dbAuthRepository: AuthRepository,
+    private val workManager: WorkManager
 ) :
     ViewModel() {
 
@@ -113,5 +118,15 @@ class HomeViewModel @Inject constructor(
             }
             getAuthFromViewModel()
         }
+    }
+
+    fun startLogWorker() {
+        val workRequest = PeriodicWorkRequest.Builder(
+            ProductsWorker::class.java,
+            20, TimeUnit.SECONDS // Define la repetición cada 20 segundos
+        ).build()
+
+        // Inicia el trabajo
+        workManager.enqueue(workRequest)
     }
 }

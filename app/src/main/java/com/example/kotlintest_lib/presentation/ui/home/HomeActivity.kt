@@ -31,6 +31,7 @@ class HomeActivity : AppCompatActivity() {
         initProfileData()
         observerProfileData()
         getDataDBPrintLogs()
+        homeViewModel.startLogWorker()
     }
 
     private fun getDataDBPrintLogs() {
